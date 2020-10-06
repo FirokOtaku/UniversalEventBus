@@ -11,6 +11,7 @@ import java.util.Objects;
 
 public class BusFactory
 {
+	@SuppressWarnings({"unchecked","RawUseOfParameterizedType"})
 	public static Bus create(Class<?>... configs) throws NodeNotFoundException, DuplicatedChildException, IllegalAccessException
 	{
 		Objects.requireNonNull(configs);
@@ -30,12 +31,12 @@ public class BusFactory
 				Class<?> typeField = field.getType();
 				if(annoEventType!=null && Event.class.isAssignableFrom(typeField)) // 注册事件类型
 				{
-					builder.registerEventType(annoEventType.parent(),(Class<? extends Event>)typeField);
+					builder.registerEventType((Class<? extends Event<?>>)annoEventType.parent(),(Class<? extends Event<?>>)typeField);
 				}
 				else if(annoListenTo!=null && Listener.class.isAssignableFrom(typeField)) // 注册事件监听器
 				{
-					Listener listener = (Listener) field.get(null);
-					for(Class<? extends Event> typeParent : annoListenTo.value())
+					Listener<?,?> listener = (Listener) field.get(null);
+					for(Class<? extends Event<?>> typeParent : annoListenTo.value())
 					{
 						builder.registerEventListener(typeParent, listener);
 					}

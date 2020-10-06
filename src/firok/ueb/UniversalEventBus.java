@@ -9,5 +9,5 @@ public class UniversalEventBus
 {
 	public static final String name = "Universal Event Bus";
 	public static final String author = "Firok";
-	public static final String version = "0.2.0";
+	public static final String version = "0.3.0";
 }
