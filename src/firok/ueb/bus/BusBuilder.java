@@ -27,7 +27,7 @@ public class BusBuilder
 	}
 
 	private final Bus bus;
-	private final Map<Class<? extends Event<?>>,EventNode<? extends Event>> nodes;
+	private final Map<Class<? extends Event<?>>,EventNode<? extends Event<?>>> nodes;
 	private BusBuilder()
 	{
 		this.bus=new Bus();
@@ -48,7 +48,7 @@ public class BusBuilder
 		this.nodes.put(typeChild,nodeChild);
 	}
 
-	public void registerEventListener(Class<? extends Event<?>> type, Listener listener)
+	public void registerEventListener(Class<? extends Event> type, Listener listener)
 			throws NodeNotFoundException
 	{
 		EventNode<? extends Event<?>> node = this.nodes.get(type);

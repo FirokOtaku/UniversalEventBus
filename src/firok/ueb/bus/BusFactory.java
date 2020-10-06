@@ -36,7 +36,7 @@ public class BusFactory
 				else if(annoListenTo!=null && Listener.class.isAssignableFrom(typeField)) // 注册事件监听器
 				{
 					Listener<?,?> listener = (Listener) field.get(null);
-					for(Class<? extends Event<?>> typeParent : annoListenTo.value())
+					for(Class<? extends Event> typeParent : annoListenTo.value())
 					{
 						builder.registerEventListener(typeParent, listener);
 					}
