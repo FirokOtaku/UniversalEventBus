@@ -20,9 +20,7 @@
 
 若需要创建一种新的事件类型, 只需要声明一个`firok.ueb.event.Event`的子类, 并且在后续步骤中注册至某个总线.
 
-所有`firok.ueb.event.Event`的子类必须提供一个形参列表为`[ Object ]`的公有构造方法, 这将用于事件实例的自动创建.
-
-在构造方法内调用`firok.ueb.event.Event#setCanCancel`即可调整某个事件类型示例是否可以被取消.
+在构造方法内调用`firok.ueb.event.Event#setCanCancel`即可调整某个事件类型的实例是否可以被取消.
 
 ### 创建事件监听器
 
@@ -58,31 +56,35 @@
 
 ### 使用示例
 
-**UEB**详细的用例请查看`firok.ueb.example.TestExample#main`
+**UEB**详细的用例请查看`firok.ueb.TestExample#main`
 
 正常运行后将会得到如下日志
 
 ```log
-listener [Base] triggered with [source11]
-listener [Base1] triggered with [source11]
-listener [Child11] triggered with [source11]
-listener [Base] triggered with [source12]
-listener [Base1] triggered with [source12]
-listener [Child12] triggered with [source12]
-listener [Base] triggered with [source21]
-listener [Base2] triggered with [source21]
-listener [Child21] triggered with [source21]
-listener [Base] triggered with [source22]
-listener [Base2] triggered with [source22]
-listener [Child22] triggered with [source22]
-listener [Base] triggered with [source1111]
-listener [Base1] triggered with [source1111]
-listener [Child11] triggered with [source1111]
-listener 111 triggered by [firok.ueb.example.EventChild111@5451c3a8:source1111]listener [Child111] canceled [source1111]
-Exception in thread "main" firok.ueb.exception.CancelException: Trying to cancel a uncanceled event [firok.ueb.example.EventChild111@5451c3a8:source1111]
+listener [Child11] triggered with [EventChild11:source11]
+listener [Base1] triggered with [EventChild11:source11]
+listener [Base] triggered with [EventChild11:source11]
+listener [Child12] triggered with [EventChild12:source12]
+listener [Base1] triggered with [EventChild12:source12]
+listener [Base] triggered with [EventChild12:source12]
+listener [Child21] triggered with [EventChild21:source21]
+listener [Base2] triggered with [EventChild21:source21]
+listener [Base] triggered with [EventChild21:source21]
+listener [Child22] triggered with [EventChild22:source22]
+listener [Base2] triggered with [EventChild22:source22]
+listener [Base] triggered with [EventChild22:source22]
+listener [Child1111] triggered with [EventChild1111:source1111]
+listener 111 triggered by [EventChild1111:source1111]
+listener [Child111] canceled [EventChild1111:source1111]
+listener 111 triggered by [EventChild111:source111]
+listener [Child111] canceled [EventChild111:source111]
 
-	at firok.ueb.event.Event.setCancel(Event.java:66)
-	at firok.ueb.example.ConfigExample$ListenerCanceler.handle(ConfigExample.java:79)
-	at firok.ueb.bus.Bus.trigger(Bus.java:66)
-	at firok.ueb.example.TestExample.main(TestExample.java:15)
+firok.ueb.exception.CancelException: Trying to cancel a uncanceled event [EventChild111:source111]
+
+
+	at firok.ueb.event.Event.setCancel(Event.java:43)
+	at firok.ueb.ConfigExample$ListenerCanceler.handle(ConfigExample.java:80)
+	at firok.ueb.bus.EventNode.trigger(EventNode.java:86)
+	at firok.ueb.bus.Bus.trigger(Bus.java:42)
+	at firok.ueb.TestExample.test(TestExample.java:18)
 ```

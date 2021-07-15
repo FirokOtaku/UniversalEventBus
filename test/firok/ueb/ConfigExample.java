@@ -1,4 +1,4 @@
-package firok.ueb.example;
+package firok.ueb;
 
 import firok.ueb.bus.EventType;
 import firok.ueb.bus.ListenTo;
@@ -9,6 +9,7 @@ import firok.ueb.listener.Listener;
 /**
  * 示例配置类
  */
+@SuppressWarnings({"unused","rawtypes"})
 public class ConfigExample
 {
 	@EventType
@@ -35,7 +36,7 @@ public class ConfigExample
 	@EventType(parent = EventBase2.class)
 	public static EventChild22 eventChild22;
 
-	static class ListenerLogger<TypeEvent extends Event<TypeSource>,TypeSource> implements Listener<TypeEvent,TypeSource>
+	static class ListenerLogger<TypeEvent extends Event,TypeSource> implements Listener
 	{
 		final String name;
 		final int priority;
@@ -49,9 +50,9 @@ public class ConfigExample
 			this.priority = priority;
 		}
 		@Override
-		public void handle(TypeEvent event, TypeSource source) throws CancelException
+		public void handle(Event event) throws CancelException
 		{
-			System.out.printf("listener [%s] triggered with [%s]\n",name,source);
+			System.out.printf("listener [%s] triggered with [%s]\n",name,event);
 		}
 
 		@Override
@@ -60,7 +61,7 @@ public class ConfigExample
 			return priority;
 		}
 	}
-	static class ListenerCanceler extends ListenerLogger<Event<Object>,Object>
+	static class ListenerCanceler extends ListenerLogger<Event,Object>
 	{
 		ListenerCanceler(String name)
 		{
@@ -73,18 +74,18 @@ public class ConfigExample
 		}
 
 		@Override
-		public void handle(Event<Object> event, Object source) throws CancelException
+		public void handle(Event event) throws CancelException
 		{
-			System.out.printf("listener [%s] canceled [%s]\n",name,source);
+			System.out.printf("listener [%s] canceled [%s]\n",name,event);
 			event.setCancel();
 		}
 	}
-	static class Listener111 implements Listener<EventChild111,Object>
+	static class Listener111 implements Listener
 	{
 		@Override
-		public void handle(EventChild111 event, Object source) throws CancelException
+		public void handle(Event event) throws CancelException
 		{
-			System.out.printf("listener 111 triggered by [%s:%s]",event,source);
+			System.out.printf("listener 111 triggered by [%s]\n",event);
 		}
 
 		@Override

@@ -1,15 +1,19 @@
 package firok.ueb.bus;
 
 import firok.ueb.event.Event;
+import firok.ueb.exception.CancelException;
 import firok.ueb.listener.Listener;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 事件树节点
  */
-@SuppressWarnings({"RawUseOfParameterizedType","ResultOfMethodCallIgnored","unchecked"})
-public class EventNode<TypeEvent extends Event<?>>
+@SuppressWarnings({"RawUseOfParameterizedType", "ResultOfMethodCallIgnored", "unchecked", "UnusedReturnValue"})
+class EventNode<TypeEvent extends Event>
 {
 	/**
 	 * 父级事件树节点
@@ -36,7 +40,7 @@ public class EventNode<TypeEvent extends Event<?>>
 	/**
 	 * 当前节点所有监听器列表
 	 */
-	List<Listener<? extends Event<?>,?>> listeners;
+	ArrayList<Listener> listeners;
 
 	/**
 	 * 当前事件所有子事件节点
@@ -60,17 +64,35 @@ public class EventNode<TypeEvent extends Event<?>>
 	 * @param listener 监听器
 	 * @return 当前事件节点
 	 */
-	EventNode<TypeEvent> registerListener(Listener<?,?> listener)
+	EventNode<TypeEvent> registerListener(Listener listener)
 	{
 		this.listeners.add(listener);
 		return this;
 	}
 
 	/**
-	 * 重新排列监听器
+	 * 在事件总线构建的最后时期调用, 对内存数据进行整理
 	 */
-	void sort()
+	void optimize()
 	{
-		Collections.sort((List)this.listeners);
+		Collections.sort(this.listeners);
+		this.listeners.trimToSize();
+	}
+
+	public boolean trigger(Event event) throws CancelException
+	{
+		EventNode<?> nodeCurrent = this;
+		while(nodeCurrent != null)
+		{
+			for(Listener listener : nodeCurrent.listeners)
+			{
+				listener.handle(event);
+				if(event.isCanceled()) return true;
+			}
+
+			nodeCurrent = nodeCurrent.parent;
+		}
+		// 把所有父类事件监听器都走了一遍
+		return false;
 	}
 }

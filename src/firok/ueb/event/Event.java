@@ -6,32 +6,9 @@ import firok.ueb.exception.CancelException;
  * 事件实例基类
  * @param <TypeSource> 事件源类型
  */
-public abstract class Event<TypeSource>
+public abstract class Event
 {
-	/**
-	 * 事件源
-	 */
-	private final TypeSource source;
-
-	/**
-	 * 创建一个事件实例
-	 * @param source 事件源
-	 * @apiNote 所有子类事件必须包含一个相同签名的构造方法
-	 */
-	public Event(TypeSource source)
-	{
-		this.source=source;
-	}
-
-	/**
-	 * 获取事件源
-	 * @return 事件源
-	 */
-	public TypeSource getSource()
-	{
-		return source;
-	}
-
+	protected Event() { }
 
 	private boolean canCancel = true;
 	/**
@@ -57,7 +34,7 @@ public abstract class Event<TypeSource>
 	 */
 	public void setCancel() throws CancelException
 	{
-		if(this.canCancel)
+		if(this.isCanCancel())
 		{
 			this.canceled = true;
 		}

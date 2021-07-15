@@ -11,4 +11,8 @@ public class NodeNotFoundException extends Exception
 	{
 		super("Event node not found: "+type.getCanonicalName());
 	}
+	public NodeNotFoundException(String canonicalName)
+	{
+		super("Event node not found: "+canonicalName);
+	}
 }
